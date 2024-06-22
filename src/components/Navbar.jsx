@@ -47,7 +47,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeLocalStorage("capstone_project_1_access_token");
-    location.reload();
+    navigate("/");
   };
 
   const handleShowLogin = () => {

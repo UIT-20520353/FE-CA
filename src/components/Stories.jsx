@@ -5,9 +5,12 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { setAddItemToCart } from "../app/CartSlice";
 import Title from "./utils/Title";
+import { setShowForm } from "../app/LoginSlice";
+import { getLocalStorage } from "../utils/sessionStorage";
 
 const Stories = ({ title, products }) => {
   const dispatch = useDispatch();
+  const token = getLocalStorage("capstone_project_1_access_token");
 
   const splideOptions = {
     perPage: 2,
@@ -36,21 +39,26 @@ const Stories = ({ title, products }) => {
                       <img
                         src={val.image}
                         alt={`img/story/${i}`}
-                        className="w-full max-h-[300px] object-cover shadow-md shadow-slate-200 rounded-tl-lg rounded-tr-lg"
+                        className="w-full max-h-[340px] object-cover shadow-md shadow-slate-200 rounded-tl-lg rounded-tr-lg"
                       />
                     </div>
 
                     <div className="grid items-center justify-items-start px-4">
-                      <h1 className="text-base font-semibold lg:text-sm">
+                      <h1 className="text-base font-semibold lg:text-sm min-h-[80px]">
                         {val.name}
                       </h1>
-                      <p className="text-sm text-justify lg:text-xs min-h-[60px]">
+                      <p className="text-sm text-justify lg:text-xs min-h-[80px]">
                         {truncate(val.description, { length: 175 })}
                       </p>
                     </div>
                     <div className="flex items-center justify-center px-4 w-full">
                       <button
                         onClick={() => {
+                          if (!token || token === "") {
+                            dispatch(setShowForm(true));
+                            return;
+                          }
+
                           dispatch(
                             setAddItemToCart({
                               id: val.id,
@@ -60,7 +68,7 @@ const Stories = ({ title, products }) => {
                             })
                           );
                         }}
-                        className="w-full bg-gradient-to-b from-slate-900 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme"
+                        className="w-full bg-gradient-to-b from-slate-900 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 mb-4 button-theme"
                       >
                         Add to cart
                       </button>
